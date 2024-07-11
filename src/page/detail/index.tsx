@@ -1,9 +1,8 @@
-import { Routes, Route, useParams, Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { pokemonListService } from "@/services";
+import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { IPokemonDetailResponse } from "@/interface/pokemondetail";
 import { pokemonDetailService } from "@/services/pokemonDetail";
-import PokemonCard from "@/component/pokemonCard";
+
 type pokemonType = {
   data: IPokemonDetailResponse | undefined;
   loading: boolean;
@@ -17,22 +16,24 @@ const Detailpage = () => {
     error: null,
   });
   const callData = async (name: string | undefined) => {
+    if (name === undefined) {
+      return;
+    }
+
     const response = await pokemonDetailService.getPokemonDetail(name);
 
     if (response.status === 200) {
-      {
-        console.log(response);
-        if (response.data)
-          setPokemon({
-            data: {
-              ...response.data,
-              image:
-                response.data.sprites.other["official-artwork"].front_default ||
-                response.data.sprites.other.dream_world.front_default,
-            },
-            loading: false,
-            error: null,
-          });
+      if (response.data) {
+        setPokemon({
+          data: {
+            ...response.data,
+            image:
+              response.data.sprites.other["official-artwork"].front_default ||
+              response.data.sprites.other.dream_world.front_default,
+          },
+          loading: false,
+          error: null,
+        });
       }
     } else {
       setPokemon({
@@ -42,6 +43,7 @@ const Detailpage = () => {
       });
     }
   };
+
   useEffect(() => {
     if (name) callData(name);
   }, [name]);

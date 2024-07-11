@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { pokemonListService } from "@/services/pokemonList";
 import { pokemonDetailService } from "@/services/pokemonDetail";
 import { useForm } from "react-hook-form";
@@ -79,8 +79,9 @@ const useSearchForm = () => {
           return a.id - b.id;
         });
       case "name":
-        data.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
-
+        return data.sort((a, b) =>
+          a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+        );
       default:
         return data.sort((a, b) => {
           return a.id - b.id;
